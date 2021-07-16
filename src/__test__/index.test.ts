@@ -241,7 +241,7 @@ describe("test environment", () => {
         `access_token=${accessToken2}`,
         `refresh_token=${refreshToken2}`,
       ])
-      .send({ ...validData, location: destId, owner: newUser._id });
+      .send({ ...validData, location: destId, owner: newOwner._id });
     const id = newAccResponse.body._id;
     const response = await request
       .delete("/accommodation/" + id)
@@ -268,7 +268,7 @@ describe("test environment", () => {
         `access_token=${accessToken2}`,
         `refresh_token=${refreshToken2}`,
       ])
-      .send({ ...validData, location: destId, owner: newUser._id });
+      .send({ ...validData, location: destId, owner: newOwner2._id });
     const acc2 = await request
       .post("/accommodation")
       .set("Cookie", [
@@ -276,7 +276,7 @@ describe("test environment", () => {
         `refresh_token=${refreshToken2}`,
       ])
       .send()
-      .send({ ...validData, location: destId, owner: newUser._id });
+      .send({ ...validData, location: destId, owner: newOwner2._id });
 
     const response = await request
       .get("/accommodation/destinations")
@@ -349,7 +349,6 @@ describe("test environment", () => {
       ])
       .send();
     expect(response.status).toBe(200);
-    console.log("response.body:", response.body);
     expect(response.body.length).toBe(4);
   });
 
@@ -363,6 +362,22 @@ describe("test environment", () => {
       .send();
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(7);
+  });
+
+  it("should test if not get /accommodations for strangers", async () => {
+    const response = await request.get("/accommodation").send();
+    expect(response.status).toBe(401);
+  });
+
+  it("should test if not post /accommodation for standard users", async () => {
+    const response = await request
+      .post("/accommodation")
+      .set("Cookie", [
+        `access_token=${accessToken}`,
+        `refresh_token=${refreshToken}`,
+      ])
+      .send({ ...validData, location: destId, owner: newUser._id });
+    expect(response.status).toBe(403);
   });
 
   afterAll((done) => {
