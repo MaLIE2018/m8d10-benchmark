@@ -19,6 +19,11 @@ const AccommodationSchema = new mongoose.Schema(
       ref: "Destination",
       required: true,
     },
+    owner: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   {
     timestamps: true,
