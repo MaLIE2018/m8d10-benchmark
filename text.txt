@@ -1,0 +1,8 @@
+•	Design of new software components in the areas of user management, license management, and planning and consolidation
+•	Communication with stakeholders and analysis of their requirements
+•	Implementation of user story mapping workshops
+•	Functional specification of features
+•	Writing user stories as a basis for development
+•	Execution of story refinements
+•	Creation of mock-ups with focus on usability and user experience
+•	Technical acceptance of developed features
