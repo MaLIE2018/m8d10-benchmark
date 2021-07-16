@@ -23,7 +23,7 @@ userRouter.post("/login", basicAuthMiddleware, async (req: any, res, next) => {
   try {
     if (req.user) {
       const { accessToken, refreshToken } = await JWTAuthenticate(req.user);
-      res.cookie("access_token", accessToken, { httpOnly: true });
+      res.cookie("access_token", accessToken, { httpOnly: true }); //sameSite: none, secure:true
       res.cookie("refresh_token", refreshToken, { httpOnly: true });
       res.status(200).send();
     }
