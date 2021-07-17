@@ -2,11 +2,11 @@ import express from "express";
 import { basicAuthMiddleware, JWTMiddleWare } from "../lib/auth/auth";
 import UserModel from "../DB/users/user";
 import createError from "http-errors";
-import { JWTAuthenticate } from "./../lib/auth/tools";
+import { JWTAuthenticate, verifyAccessToken } from "./../lib/auth/tools";
 import { hostsOnly } from "../lib/auth/hosts";
 import AccommodationModel from "../DB/accommodations/index";
 import { DestinationModel } from "../DB/accommodations/index";
-
+import { NextFunction, Request, Response } from "express";
 const userRouter = express.Router();
 
 userRouter.post("/register", async (req, res, next) => {
@@ -19,7 +19,7 @@ userRouter.post("/register", async (req, res, next) => {
   }
 });
 
-userRouter.post("/login", basicAuthMiddleware, async (req: any, res, next) => {
+userRouter.get("/login", basicAuthMiddleware, async (req: any, res, next) => {
   try {
     if (req.user) {
       const { accessToken, refreshToken } = await JWTAuthenticate(req.user);
@@ -32,6 +32,23 @@ userRouter.post("/login", basicAuthMiddleware, async (req: any, res, next) => {
     next(error);
   }
 });
+
+userRouter.get(
+  "/logout",
+  JWTMiddleWare,
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      if (req.user) {
+        res.clearCookie("access_token");
+        res.clearCookie("refresh_token");
+        res.status(200).send();
+      }
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+);
 
 userRouter.get(
   "/me/accommodations",

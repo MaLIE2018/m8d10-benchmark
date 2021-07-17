@@ -2,8 +2,9 @@ import UserModel from "../../DB/users/user";
 import createError from "http-errors";
 import { verifyAccessToken } from "./tools";
 import atob from "atob";
+import { Middleware } from "../../types/interfaces";
 
-export const JWTMiddleWare = async (req: any, res: any, next: any) => {
+export const JWTMiddleWare: Middleware = async (req, res, next) => {
   if (!req.cookies.access_token) {
     next(createError(401, { message: "Provide Access Token" }));
   } else {
@@ -24,7 +25,7 @@ export const JWTMiddleWare = async (req: any, res: any, next: any) => {
   }
 };
 
-export const basicAuthMiddleware = async (req: any, res: any, next: any) => {
+export const basicAuthMiddleware: Middleware = async (req, res, next) => {
   if (!req.headers.authorization) {
     next(createError(401, { message: "Authorization required" }));
   } else {

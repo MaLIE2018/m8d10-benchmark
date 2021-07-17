@@ -10,7 +10,7 @@ interface UserModel extends Model<User> {
 
 const UserSchema = new Schema<User, UserModel>({
   name: { type: String, required: true },
-  email: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
   role: { type: String, required: true, enum: ["host", "guest"] },
   password: { type: String },
   refreshToken: { type: String, default: "token" },

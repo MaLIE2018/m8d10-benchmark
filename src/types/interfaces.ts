@@ -1,3 +1,5 @@
+import { NextFunction, Request, Response } from "express";
+
 export interface User {
   _id: string;
   name: string;
@@ -6,6 +8,14 @@ export interface User {
   role: Role;
   refreshToken: string;
   save: Function;
+}
+
+export interface Accommodation {
+  _id: string;
+  name: string;
+  location: { _id: string; location: string; __v: number };
+  description: string;
+  maxGuests: number;
 }
 
 enum Role {
@@ -20,3 +30,9 @@ export interface newUser {
   role: string;
   _id: string;
 }
+
+export type Middleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => void;

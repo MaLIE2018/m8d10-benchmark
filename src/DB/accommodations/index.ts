@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Accommodation } from "../../types/interfaces";
 
-const AccommodationSchema = new mongoose.Schema(
+const AccommodationSchema = new mongoose.Schema<Accommodation>(
   {
     name: {
       type: String,
@@ -29,6 +30,17 @@ const AccommodationSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+AccommodationSchema.methods.toJSON = function () {
+  const accs = this;
+  const accsObj = accs.toObject();
+  delete accsObj.location.__v;
+  delete accsObj.updatedAt;
+  delete accsObj.createdAt;
+  delete accsObj.__v;
+  return accsObj;
+};
+
 const DestinationSchema = new mongoose.Schema({
   location: {
     type: String,
