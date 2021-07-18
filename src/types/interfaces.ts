@@ -18,6 +18,11 @@ export interface Accommodation {
   maxGuests: number;
 }
 
+export interface Destination {
+  _id: string;
+  location: string;
+}
+
 enum Role {
   "host",
   "guest",

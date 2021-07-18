@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Accommodation } from "../../types/interfaces";
+import { Accommodation, Destination } from "../../types/interfaces";
 
 const AccommodationSchema = new mongoose.Schema<Accommodation>(
   {
@@ -41,13 +41,27 @@ AccommodationSchema.methods.toJSON = function () {
   return accsObj;
 };
 
-const DestinationSchema = new mongoose.Schema({
+const DestinationSchema = new mongoose.Schema<Destination>({
   location: {
     type: String,
     required: true,
     unique: true,
   },
 });
+
+DestinationSchema.pre("save", function () {
+  const destination = this;
+  destination.location =
+    destination.location.slice(0, 1).toUpperCase() +
+    destination.location.slice(1);
+});
+
+DestinationSchema.methods.toJSON = function () {
+  const accs = this;
+  const accsObj = accs.toObject();
+  delete accsObj.__v;
+  return accsObj;
+};
 
 export const DestinationModel = mongoose.model(
   "Destination",
